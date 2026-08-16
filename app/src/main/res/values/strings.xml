@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">TaskFlow</string>
+
+    <!-- Task List -->
+    <string name="task_list_title">Minhas Tarefas</string>
+    <string name="home_summary_title">Resumo da semana</string>
+    <string name="home_summary_subtitle_attention">Você tem tarefas atrasadas pendentes</string>
+    <string name="home_summary_subtitle_ok">Tudo em dia por aqui</string>
+    <string name="home_summary_overdue">Atrasadas</string>
+    <string name="home_summary_due_this_week">Essa semana</string>
+
+    <!-- Dashboard — widget Próxima Tarefa -->
+    <string name="next_task_widget_title">Próxima tarefa</string>
+    <string name="next_task_widget_empty">Nenhuma tarefa pendente — tudo em dia!</string>
+    <string name="next_task_due_in">Em %s</string>
+    <string name="next_task_overdue">Atrasada há %s</string>
+    <string name="next_task_due_now">Vence agora</string>
+    <plurals name="relative_time_hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="other">%d horas</item>
+    </plurals>
+    <plurals name="relative_time_days">
+        <item quantity="one">%d dia</item>
+        <item quantity="other">%d dias</item>
+    </plurals>
+
+    <!-- Dashboard — tela de configurações -->
+    <string name="dashboard_settings_title">Personalizar painel</string>
+    <string name="dashboard_settings_description">Escolha quais cards aparecem no topo da Home e arraste para reordenar.</string>
+    <string name="dashboard_settings_active_section">Ativos</string>
+    <string name="dashboard_settings_available_section">Disponíveis</string>
+    <string name="dashboard_settings_content_description">Personalizar painel</string>
+    <string name="dashboard_settings_reorder_content_description">Arrastar para reordenar</string>
+    <string name="dashboard_widget_overview_name">Visão geral</string>
+    <string name="dashboard_widget_overview_description">Resumo da semana (atrasadas / próximos 7 dias) e a tarefa mais urgente no momento</string>
+
+    <!-- Dashboard — clima -->
+    <string name="weather_settings_title">Clima</string>
+    <string name="weather_settings_description">Configure sua cidade para ver o clima do dia no painel e receber um aviso se a semana tiver chuva forte, queda/subida brusca de temperatura ou umidade baixa.</string>
+    <string name="weather_settings_city_label">Cidade</string>
+    <string name="weather_settings_save">Salvar cidade</string>
+    <string name="weather_settings_cancel">Cancelar</string>
+    <string name="weather_settings_error">Cidade não encontrada, ou sem conexão no momento. Tente novamente.</string>
+    <string name="weather_settings_city_configured">A cidade configurada para mostrar o tempo no painel inicial é \"%1$s\"</string>
+    <string name="weather_settings_edit_content_description">Editar cidade</string>
+    <string name="task_list_uncategorized_title">Sem categoria</string>
+    <string name="task_list_empty_message">Nenhuma tarefa cadastrada ainda. Toque em + para começar.</string>
+    <string name="task_list_error_message">Não foi possível carregar suas tarefas. Verifique o app e tente novamente.</string>
+    <string name="task_list_retry_button">Tentar novamente</string>
+    <string name="task_list_add_content_description">Adicionar tarefa</string>
+    <string name="theme_toggle_dark_content_description">Ativar tema escuro</string>
+    <string name="theme_toggle_light_content_description">Ativar tema claro</string>
+    <string name="task_complete_content_description">Concluir tarefa</string>
+    <string name="task_carousel_complete_action">Concluir</string>
+    <string name="task_carousel_delete_action">Excluir</string>
+    <string name="task_deleted_snackbar_message">\"%1$s\" excluída</string>
+    <string name="task_deleted_undo_action">Desfazer</string>
+    <string name="task_completed_snackbar_message">\"%1$s\" concluída — próxima em %2$s</string>
+    <string name="task_section_reorder_content_description">Arrastar para reordenar categoria</string>
+
+    <!-- Add Task -->
+    <string name="add_task_title">Nova Tarefa</string>
+    <string name="edit_task_title">Editar Tarefa</string>
+    <string name="add_task_field_title">Título</string>
+    <string name="add_task_field_description">Descrição</string>
+    <string name="add_task_recurrence_label">Recorrência</string>
+    <string name="add_task_custom_interval_label">Repetir a cada quantos dias?</string>
+    <string name="add_task_category_label">Categoria</string>
+    <string name="add_task_save_button">Salvar Tarefa</string>
+    <string name="add_task_error_empty_title">Informe um título para a tarefa</string>
+    <string name="add_task_error_unknown">Não foi possível salvar a tarefa. Tente novamente.</string>
+    <string name="add_task_new_category_chip">+ Nova categoria</string>
+    <string name="add_category_dialog_title">Nova categoria</string>
+    <string name="add_category_field_name">Nome da categoria</string>
+    <string name="add_category_confirm">Adicionar</string>
+    <string name="add_category_cancel">Cancelar</string>
+    <string name="add_category_error_empty_name">Informe um nome para a categoria</string>
+    <string name="add_category_error_duplicate_name">Já existe uma categoria com esse nome</string>
+
+    <!-- Recurrence types -->
+    <string name="recurrence_daily">Diária</string>
+    <string name="recurrence_weekly">Semanal</string>
+    <string name="recurrence_monthly">Mensal</string>
+    <string name="recurrence_yearly">Anual</string>
+    <string name="recurrence_custom">Personalizada</string>
+
+    <!-- Task Detail -->
+    <string name="task_detail_next_execution">Próxima execução: %1$s</string>
+    <string name="task_detail_history_title">Histórico de execuções</string>
+    <string name="task_detail_edit_button">Editar Tarefa</string>
+    <string name="task_detail_delete_button">Excluir Tarefa</string>
+    <string name="task_delete_confirmation_title">Excluir tarefa?</string>
+    <string name="task_delete_confirmation_message">Essa ação não pode ser desfeita. O histórico de execuções também será removido.</string>
+    <string name="task_delete_confirmation_confirm">Excluir</string>
+    <string name="task_delete_confirmation_cancel">Cancelar</string>
+    <string name="task_detail_not_found_message">Essa tarefa não existe mais.</string>
+    <string name="task_detail_not_found_back">Voltar</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Lembretes de Tarefas</string>
+    <string name="notification_channel_description">Notificações de tarefas próximas do vencimento</string>
+    <string name="notification_title">Hora de executar sua tarefa</string>
+
+    <!-- Notifications — alertas de clima -->
+    <string name="weather_notification_channel_name">Alertas de Clima</string>
+    <string name="weather_notification_channel_description">Avisos de chuva forte, mudança brusca de temperatura ou umidade baixa na semana</string>
+    <string name="weather_notification_title">Alerta de clima da semana</string>
+    <string name="weather_alert_heavy_rain">Chuva forte prevista para %1$s (%2$d%% de chance)</string>
+    <string name="weather_alert_low_humidity">Umidade baixa prevista para %1$s (%2$d%%)</string>
+    <string name="weather_alert_temperature_swing">Mudança brusca de temperatura entre %1$s e %2$s (%3$d°C)</string>
+</resources>
