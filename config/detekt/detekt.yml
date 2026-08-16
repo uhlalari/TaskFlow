@@ -1,0 +1,45 @@
+build:
+  maxIssues: 0
+
+style:
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: true
+    max: 3
+  WildcardImport:
+    active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 140
+
+performance:
+  SpreadOperator:
+    active: false
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 60
+    ignoreAnnotated: [ 'Composable' ]
+  LongParameterList:
+    active: true
+    functionThreshold: 7
+    ignoreAnnotated: [ 'Composable' ]
+  TooManyFunctions:
+    active: true
+    thresholdInClasses: 15
+
+naming:
+  FunctionNaming:
+    active: true
+    # Funções @Composable seguem PascalCase por convenção oficial do Google
+    # (https://developer.android.com/develop/ui/compose/api-guidelines#naming-unit-composable).
+    ignoreAnnotated: [ 'Composable' ]
+
+potential-bugs:
+  UnsafeCallOnNullableType:
+    active: true
+
+comments:
+  active: false
