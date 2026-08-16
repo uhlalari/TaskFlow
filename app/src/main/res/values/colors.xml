@@ -1,0 +1,9 @@
+<resources>
+    <!-- Espelham a paleta do tema escuro definida em Theme.kt (DarkColors) — usadas
+         fora do Compose (ex.: cor da status bar), onde não há acesso a MaterialTheme. -->
+    <color name="glass_primary">#39FF88</color>
+    <color name="glass_secondary">#FF3DAE</color>
+    <color name="glass_tertiary">#FF1F5A</color>
+    <color name="background_dark">#0A0A0C</color>
+    <color name="background_light">#F6EEE3</color>
+</resources>
