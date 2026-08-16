@@ -377,7 +377,7 @@ Pipeline em `.github/workflows/ci.yml`, com 3 jobs paralelizáveis por dependên
 
 ### Métricas de Código
 - **Linguagem**: Kotlin 100%
-- **Linhas de código**: ~5.000+ linhas Kotlin
+- **Linhas de código**: ~4.400 linhas Kotlin (código principal)
 - **Cobertura de testes**: ~70% (estimado)
 - **Dependências**: 15+ bibliotecas principais
 - **Complexidade ciclomática**: Baixa a média (funções pequenas e focadas)
