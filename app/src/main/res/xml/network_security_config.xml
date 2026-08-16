@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Explícito em vez de confiar só no padrão do Android (que já bloqueia cleartext
+    porque targetSdkVersion >= 28) — assim uma mudança futura no manifest (ex.:
+    alguém adicionar `usesCleartextTraffic="true"` sem perceber a implicação) não
+    reabre a porta silenciosamente. Único uso de rede do app é a Open-Meteo, sempre
+    via HTTPS (ver NetworkModule) — não há necessidade de exceção por domínio nem de
+    certificate pinning para uma API pública, gratuita e sem dado sensível.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>
