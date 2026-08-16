@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Excluir taskflow.db inteiro do backup faria o usuário perder todas as tarefas ao
+    trocar de aparelho ou reinstalar — para um app 100% offline sem sincronização, o
+    backup é a única forma de continuidade de dados entre dispositivos. Por isso só
+    excluímos os arquivos transacionais do Room (WAL/SHM/journal), que podem estar em
+    estado inconsistente no momento do backup; o `.db` principal é preservado.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="database" path="taskflow.db-wal" />
+        <exclude domain="database" path="taskflow.db-shm" />
+        <exclude domain="database" path="taskflow.db-journal" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="database" path="taskflow.db-wal" />
+        <exclude domain="database" path="taskflow.db-shm" />
+        <exclude domain="database" path="taskflow.db-journal" />
+    </device-transfer>
+</data-extraction-rules>
