@@ -1,14 +1,14 @@
 [versions]
-agp = "8.4.2"
-kotlin = "1.9.24"
-ksp = "1.9.24-1.0.20"
+agp = "9.0.1"
+kotlin = "2.2.10"
+ksp = "2.2.10-2.0.2"
 
 coreKtx = "1.13.1"
 lifecycle = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.09.02"
 navigationCompose = "2.7.7"
-room = "2.6.1"
+room = "2.8.4"
 koin = "3.5.6"
 coroutines = "1.8.1"
 workManager = "2.9.0"
@@ -77,7 +77,7 @@ androidx-test-core = { group = "androidx.test", name = "core", version.ref = "an
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

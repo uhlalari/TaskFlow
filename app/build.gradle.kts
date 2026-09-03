@@ -1,8 +1,9 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kover)
@@ -86,23 +87,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += listOf(
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
-        )
-    }
-
-    kotlin {
-        jvmToolchain(17)
-    }
-
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     packaging {
@@ -121,6 +107,15 @@ android {
         warningsAsErrors = false
         checkDependencies = true
     }
+}
+
+kotlin {
+    compilerOptions {
+        optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
+    }
+}
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = "17"
 }
 
 detekt {
