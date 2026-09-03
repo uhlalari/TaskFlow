@@ -16,10 +16,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,8 +45,12 @@ import com.taskflow.app.presentation.designsystem.GlassPrimary
 import com.taskflow.app.presentation.designsystem.GlassTertiary
 import com.taskflow.app.presentation.designsystem.GlassTextField
 import com.taskflow.app.presentation.designsystem.LiquidBackground
+import com.taskflow.app.presentation.util.DateFormats
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 @Composable
 fun AddTaskScreen(
@@ -62,6 +69,18 @@ fun AddTaskScreen(
             error = state.newCategoryError,
             onConfirm = viewModel::onConfirmAddCategory,
             onDismiss = viewModel::onDismissAddCategoryDialog
+        )
+    }
+
+    var isStartDatePickerVisible by remember { mutableStateOf(false) }
+    if (isStartDatePickerVisible) {
+        StartDatePickerDialog(
+            initialDate = state.startDate,
+            onConfirm = { date ->
+                viewModel.onStartDateChange(date)
+                isStartDatePickerVisible = false
+            },
+            onDismiss = { isStartDatePickerVisible = false }
         )
     }
 
@@ -131,6 +150,21 @@ fun AddTaskScreen(
                     )
                 }
 
+                AnimatedVisibility(
+                    visible = !state.isEditMode,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(stringResource(R.string.add_task_start_date_label))
+                        GlassChip(
+                            label = state.startDate.format(DateFormats.TASK_START_DATE),
+                            selected = false,
+                            onClick = { isStartDatePickerVisible = true }
+                        )
+                    }
+                }
+
                 Text(stringResource(R.string.add_task_category_label))
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(state.categories) { category ->
@@ -187,6 +221,42 @@ private fun errorMessage(error: AddTaskFormError): String = when (error) {
     AddTaskFormError.EmptyCategoryName -> stringResource(R.string.add_category_error_empty_name)
     AddTaskFormError.DuplicateCategoryName -> stringResource(R.string.add_category_error_duplicate_name)
     AddTaskFormError.Unknown -> stringResource(R.string.add_task_error_unknown)
+}
+
+@Composable
+private fun StartDatePickerDialog(
+    initialDate: LocalDate,
+    onConfirm: (LocalDate) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = initialDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+    )
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val selectedMillis = datePickerState.selectedDateMillis
+                    if (selectedMillis != null) {
+                        onConfirm(Instant.ofEpochMilli(selectedMillis).atZone(ZoneOffset.UTC).toLocalDate())
+                    } else {
+                        onDismiss()
+                    }
+                }
+            ) {
+                Text(stringResource(R.string.add_task_start_date_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.add_task_start_date_cancel))
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
+    }
 }
 
 @Composable
