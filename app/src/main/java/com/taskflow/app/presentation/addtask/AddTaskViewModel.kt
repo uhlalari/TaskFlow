@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Suppress("LongParameterList")
@@ -84,6 +85,10 @@ class AddTaskViewModel(
         }
     }
 
+    fun onStartDateChange(date: LocalDate) {
+        _state.value = _state.value.copy(startDate = date)
+    }
+
     fun onCategorySelected(categoryId: Long) {
         _state.value = _state.value.copy(selectedCategoryId = categoryId)
     }
@@ -146,7 +151,7 @@ class AddTaskViewModel(
         categoryId = current.selectedCategoryId,
         recurrenceType = current.recurrenceType,
         customIntervalDays = current.customIntervalDaysText.toIntOrNull(),
-        nextDueDate = LocalDateTime.now()
+        nextDueDate = LocalDateTime.of(current.startDate, current.startTime)
     )
 
     private fun buildUpdatedTask(current: AddTaskState): Task {
