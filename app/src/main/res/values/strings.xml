@@ -66,6 +66,9 @@
     <string name="add_task_recurrence_label">Recorrência</string>
     <string name="add_task_custom_interval_label">Repetir a cada quantos dias?</string>
     <string name="add_task_category_label">Categoria</string>
+    <string name="add_task_start_date_label">Data de início da recorrência</string>
+    <string name="add_task_start_date_confirm">Confirmar</string>
+    <string name="add_task_start_date_cancel">Cancelar</string>
     <string name="add_task_save_button">Salvar Tarefa</string>
     <string name="add_task_error_empty_title">Informe um título para a tarefa</string>
     <string name="add_task_error_unknown">Não foi possível salvar a tarefa. Tente novamente.</string>

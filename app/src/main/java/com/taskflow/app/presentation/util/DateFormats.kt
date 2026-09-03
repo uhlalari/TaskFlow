@@ -4,4 +4,5 @@ import java.time.format.DateTimeFormatter
 
 object DateFormats {
     val TASK_DUE_DATE: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+    val TASK_START_DATE: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 }
