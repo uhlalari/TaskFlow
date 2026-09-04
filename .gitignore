@@ -91,8 +91,6 @@ lint-results*.xml
 # Android Profiling
 *.hprof
 
-# Room schema exports (optional - remove if you want to commit schemas)
-app/schemas/
 
 # OS-specific files
 .DS_Store

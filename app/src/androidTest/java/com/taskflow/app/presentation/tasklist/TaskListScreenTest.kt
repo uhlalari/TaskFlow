@@ -2,6 +2,7 @@ package com.taskflow.app.presentation.tasklist
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.taskflow.app.domain.util.RecurrenceCalculator
 import com.taskflow.app.domain.model.RecurrenceType
@@ -77,7 +78,7 @@ class TaskListScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Limpar aquário").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("TaskCarouselItem_1").assertIsDisplayed()
     }
 
     private fun buildViewModel(repository: FakeTaskRepository): TaskListViewModel {

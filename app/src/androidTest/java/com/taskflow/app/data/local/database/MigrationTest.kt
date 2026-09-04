@@ -29,7 +29,7 @@ class MigrationTest {
     )
 
     @Test
-    fun `migracao 1 para 2 preserva categorias existentes e calcula sortOrder alfabetico`() {
+    fun migration1to2PreservesCategoriesAndSortsAlphabetically() {
         helper.createDatabase(TEST_DB_NAME, 1).apply {
             execSQL("INSERT INTO categories (id, name, colorHex, icon) VALUES (1, 'Zebra', '#000000', 'icon')")
             execSQL("INSERT INTO categories (id, name, colorHex, icon) VALUES (2, 'Alfa', '#000000', 'icon')")
