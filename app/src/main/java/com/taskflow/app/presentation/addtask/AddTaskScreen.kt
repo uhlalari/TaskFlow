@@ -7,17 +7,24 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -96,112 +103,153 @@ fun AddTaskScreen(
                 return@Scaffold
             }
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(
-                    text = stringResource(
-                        if (state.isEditMode) R.string.edit_task_title else R.string.add_task_title
-                    ),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-
-                GlassTextField(
-                    value = state.title,
-                    onValueChange = viewModel::onTitleChange,
-                    label = stringResource(R.string.add_task_field_title),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                GlassTextField(
-                    value = state.description,
-                    onValueChange = viewModel::onDescriptionChange,
-                    label = stringResource(R.string.add_task_field_description),
-                    singleLine = false,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Text(stringResource(R.string.add_task_recurrence_label))
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(RecurrenceType.entries) { type ->
-                        GlassChip(
-                            label = recurrenceLabel(type),
-                            selected = state.recurrenceType == type,
-                            onClick = { viewModel.onRecurrenceTypeChange(type) }
-                        )
-                    }
+                item {
+                    Text(
+                        text = stringResource(
+                            if (state.isEditMode) R.string.edit_task_title else R.string.add_task_title
+                        ),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
 
-                AnimatedVisibility(
-                    visible = state.recurrenceType == RecurrenceType.CUSTOM_DAYS,
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
+                item {
                     GlassTextField(
-                        value = state.customIntervalDaysText,
-                        onValueChange = viewModel::onCustomIntervalDaysChange,
-                        label = stringResource(R.string.add_task_custom_interval_label),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        value = state.title,
+                        onValueChange = viewModel::onTitleChange,
+                        label = stringResource(R.string.add_task_field_title),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
 
-                AnimatedVisibility(
-                    visible = !state.isEditMode,
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(stringResource(R.string.add_task_start_date_label))
-                        GlassChip(
-                            label = state.startDate.format(DateFormats.TASK_START_DATE),
-                            selected = false,
-                            onClick = { isStartDatePickerVisible = true }
-                        )
-                    }
+                item {
+                    GlassTextField(
+                        value = state.description,
+                        onValueChange = viewModel::onDescriptionChange,
+                        label = stringResource(R.string.add_task_field_description),
+                        singleLine = false,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
 
-                Text(stringResource(R.string.add_task_category_label))
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(state.categories) { category ->
-                        GlassChip(
-                            label = category.name,
-                            selected = state.selectedCategoryId == category.id,
-                            onClick = { viewModel.onCategorySelected(category.id) }
-                        )
-                    }
-                    item {
-                        GlassChip(
-                            label = stringResource(R.string.add_task_new_category_chip),
-                            selected = false,
-                            onClick = viewModel::onAddCategoryClick
-                        )
-                    }
-                }
+                item {
+                    SectionCard(title = stringResource(R.string.add_task_recurrence_label)) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(RecurrenceType.entries) { type ->
+                                GlassChip(
+                                    label = recurrenceLabel(type),
+                                    selected = state.recurrenceType == type,
+                                    onClick = { viewModel.onRecurrenceTypeChange(type) }
+                                )
+                            }
+                        }
 
-                AnimatedVisibility(
-                    visible = state.error != null,
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
-                    state.error?.let { error ->
-                        GlassCard(modifier = Modifier.fillMaxWidth()) {
-                            Text(errorMessage(error), color = GlassTertiary)
+                        AnimatedVisibility(
+                            visible = state.recurrenceType == RecurrenceType.CUSTOM_DAYS,
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically()
+                        ) {
+                            GlassTextField(
+                                value = state.customIntervalDaysText,
+                                onValueChange = viewModel::onCustomIntervalDaysChange,
+                                label = stringResource(R.string.add_task_custom_interval_label),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
+                            )
                         }
                     }
                 }
 
-                GlassButton(
-                    text = stringResource(R.string.add_task_save_button),
-                    isLoading = state.isSaving,
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                    onClick = viewModel::onSaveClick
-                )
+                if (!state.isEditMode) {
+                    item {
+                        SectionCard(title = stringResource(R.string.add_task_start_date_label)) {
+                            GlassChip(
+                                label = state.startDate.format(DateFormats.TASK_START_DATE),
+                                selected = false,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = null,
+                                        tint = GlassPrimary
+                                    )
+                                },
+                                onClick = { isStartDatePickerVisible = true }
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    SectionCard(title = stringResource(R.string.add_task_category_label)) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(state.categories) { category ->
+                                GlassChip(
+                                    label = category.name,
+                                    selected = state.selectedCategoryId == category.id,
+                                    onClick = { viewModel.onCategorySelected(category.id) }
+                                )
+                            }
+                            item {
+                                GlassChip(
+                                    label = stringResource(R.string.add_task_new_category_chip),
+                                    selected = false,
+                                    onClick = viewModel::onAddCategoryClick
+                                )
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    AnimatedVisibility(
+                        visible = state.error != null,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        state.error?.let { error ->
+                            GlassCard(modifier = Modifier.fillMaxWidth()) {
+                                Text(errorMessage(error), color = GlassTertiary)
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    GlassButton(
+                        text = stringResource(R.string.add_task_save_button),
+                        isLoading = state.isSaving,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = viewModel::onSaveClick
+                    )
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun SectionCard(
+    title: String,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    GlassCard(modifier = modifier.fillMaxWidth()) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            content()
         }
     }
 }

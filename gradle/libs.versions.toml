@@ -15,6 +15,7 @@ workManager = "2.9.0"
 datastore = "1.1.1"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
+haze = "1.6.10"
 
 junit = "4.13.2"
 mockitoKotlin = "5.4.0"
@@ -62,6 +63,9 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+
+haze-core = { group = "dev.chrisbanes.haze", name = "haze-android", version.ref = "haze" }
+haze-materials = { group = "dev.chrisbanes.haze", name = "haze-materials-android", version.ref = "haze" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
