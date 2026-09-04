@@ -23,7 +23,9 @@ categoria, e dispara notificações locais precisas mesmo em Doze Mode — 100% 
 
 ## 🎯 Funcionalidades
 
-- **Tarefas recorrentes**: diária, semanal, mensal, anual ou intervalo customizado em dias
+- **Tarefas recorrentes**: diária, semanal, mensal, anual ou intervalo customizado em dias,
+  com **data de início** própria — a recorrência é calculada a partir da data escolhida na
+  criação da tarefa, não sempre da data atual
 - **Categorização** por cor/ícone (Pets, Casa, Saúde, Manutenção, ...) — com categorias
   seedadas por padrão e criação de categorias personalizadas direto na tela de Nova Tarefa
 - **Edição de tarefas**, reaproveitando a mesma tela de criação
@@ -110,10 +112,23 @@ paleta e vocabulário visual (gradientes translúcidos + bordas com brilho sutil
 | Componente | Uso |
 |---|---|
 | `LiquidBackground` | Fundo animado (blobs de cor + bolhas + grain), usado em toda tela |
-| `GlassCard` | Container translúcido com borda gradiente — base de cards e banners |
+| `GlassCard` | Container com **blur real de fundo** (backdrop blur, via Haze) + borda gradiente — base de cards e banners |
 | `GlassButton` | Botão primário com gradiente horizontal `GlassPrimary → GlassSecondary` |
 | `GlassTextField` | Input com fundo translúcido e cor de foco `GlassPrimary` |
 | `GlassChip` | Seleção única (recorrência, categoria), com `semantics { role = RadioButton }` |
+
+**Blur de fundo real, não simulado por alpha** (`GlassCard`): usamos a lib
+[Haze](https://github.com/chrisbanes/haze) para desfocar de verdade o conteúdo do
+`LiquidBackground` (blobs + bolhas + grain) atrás de cada card, em vez de só empilhar
+cores translúcidas — é o mesmo princípio do Liquid Glass da Apple (backdrop blur), não
+uma aproximação. `LiquidBackground` expõe um `HazeState` via `CompositionLocal`
+(`LocalHazeState`); qualquer `GlassCard` na árvore de composição abaixo dele aplica
+`Modifier.hazeEffect(...)` com um `HazeStyle` próprio, tintado com a `accentColor` de
+cada card (categoria, alerta etc.). Sem `HazeState` disponível (card renderizado fora
+de um `LiquidBackground`), o componente cai de volta para a translucidez simulada por
+alpha que existia antes — sem quebrar. Também adicionamos uma sombra (`Modifier.shadow`)
+por baixo do card, para reforçar a sensação de vidro flutuando sobre a superfície, em
+vez de "colado" na tela.
 
 **Duas identidades visuais, um só vocabulário:** claro e escuro não são só um
 inverte-cores um do outro — têm paletas propositalmente diferentes. O que os mantém
@@ -284,10 +299,11 @@ TalkBack, suporte a fonte com escala > 200%.
 
 | Categoria | Tecnologia | Versão |
 |---|---|---|
-| Linguagem | Kotlin | 1.9.24 |
+| Linguagem | Kotlin (built-in no AGP, sem plugin `kotlin-android` separado) | 2.2.10 |
 | UI | Jetpack Compose (Material 3) | BOM 2024.09.02 |
-| Build | Android Gradle Plugin | 8.4.2 |
-| Persistência | Room (KSP, não kapt) | 2.6.1 |
+| Build | Android Gradle Plugin | 9.0.1 |
+| Blur/Glass | [Haze](https://github.com/chrisbanes/haze) (backdrop blur real no `GlassCard`) | 1.6.10 |
+| Persistência | Room (KSP, não kapt) | 2.8.4 |
 | Preferências | DataStore | 1.1.1 |
 | DI | Koin (`koin-android`, `koin-androidx-compose`, `koin-androidx-workmanager`) | 3.5.6 |
 | Concorrência | Kotlin Coroutines + Flow/StateFlow | 1.8.1 |
@@ -299,7 +315,8 @@ TalkBack, suporte a fonte com escala > 200%.
 | Cobertura | Kover | 0.8.3 |
 | CI/CD | GitHub Actions | — |
 
-**Min SDK 26 · Target/Compile SDK 34 · JVM target 17.**
+**Min SDK 26 · Target SDK 34 · Compile SDK 35 · JVM target 17** (Detekt roda fixo em
+JVM 17 mesmo quando o Gradle é executado com JDK mais recente — ver `app/build.gradle.kts`).
 
 ## 🧪 Testes
 
@@ -354,8 +371,9 @@ Pipeline em `.github/workflows/ci.yml`, com 3 jobs paralelizáveis por dependên
 
 1. Clone o repositório
 2. Abra no Android Studio (Iguana ou mais recente)
-3. **Gradle JDK**: configure Java 17 em
-   *Settings → Build, Execution, Deployment → Build Tools → Gradle*
+3. **Gradle JDK**: configure Java 21 em
+   *Settings → Build, Execution, Deployment → Build Tools → Gradle* (o Detekt 1.23.x
+   ainda não suporta JDK 25 — [issue conhecida](https://github.com/detekt/detekt/issues/8745))
 4. Sincronize o Gradle
 
 ## 📊 Análise do Projeto
