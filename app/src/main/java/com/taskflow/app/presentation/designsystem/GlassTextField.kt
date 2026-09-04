@@ -29,11 +29,12 @@ fun GlassTextField(
         keyboardOptions = keyboardOptions,
         shape = RoundedCornerShape(16.dp),
         modifier = modifier
-            .background(Color.White.copy(alpha = 0.05f), RoundedCornerShape(16.dp)),
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.08f), RoundedCornerShape(16.dp)),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = GlassPrimary,
-            unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+            unfocusedBorderColor = GlassPrimary.copy(alpha = 0.45f),
             focusedLabelColor = GlassPrimary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
             cursorColor = GlassPrimary,
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface

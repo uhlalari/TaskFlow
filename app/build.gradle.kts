@@ -24,7 +24,7 @@ fun signingProperty(key: String, envVar: String): String? =
 
 android {
     namespace = "com.taskflow.app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.taskflow.app"
@@ -114,6 +114,11 @@ kotlin {
         optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
     }
 }
+
+// Detekt infere o jvmTarget a partir da JVM que executa o Gradle, mas ainda não
+// entende JDK 25 como valor válido (https://github.com/detekt/detekt/issues/8745).
+// Fixamos explicitamente no Java alvo do projeto para funcionar independente da
+// JDK usada para rodar o Gradle.
 tasks.withType<Detekt>().configureEach {
     jvmTarget = "17"
 }
@@ -145,6 +150,8 @@ dependencies {
     implementation(libs.compose.animation)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.extended)
+    implementation(libs.haze.core)
+    implementation(libs.haze.materials)
 
     implementation(libs.navigation.compose)
 
