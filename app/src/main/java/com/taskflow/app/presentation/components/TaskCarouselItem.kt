@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,7 +56,9 @@ fun TaskCarouselItem(
         label = "task_carousel_due_date_color"
     )
 
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier.testTag("TaskCarouselItem_${task.id}")
+    ) {
         GlassCard(
             tint = accentColor,
             modifier = Modifier
