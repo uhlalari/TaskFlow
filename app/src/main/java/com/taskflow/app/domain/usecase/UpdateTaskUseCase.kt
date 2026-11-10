@@ -1,7 +1,6 @@
 package com.taskflow.app.domain.usecase
 
 import com.taskflow.app.domain.model.Task
-import com.taskflow.app.domain.model.TaskValidationException
 import com.taskflow.app.domain.repository.TaskRepository
 
 class UpdateTaskUseCase(
@@ -9,7 +8,7 @@ class UpdateTaskUseCase(
     private val scheduleNotificationUseCase: ScheduleNotificationUseCase
 ) {
     suspend operator fun invoke(task: Task) {
-        if (task.title.isBlank()) throw TaskValidationException.EmptyTitle
+        task.validate()
 
         taskRepository.updateTask(task)
         scheduleNotificationUseCase(task)

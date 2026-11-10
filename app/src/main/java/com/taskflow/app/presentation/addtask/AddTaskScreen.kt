@@ -266,6 +266,7 @@ private fun recurrenceLabel(type: RecurrenceType): String = when (type) {
 @Composable
 private fun errorMessage(error: AddTaskFormError): String = when (error) {
     AddTaskFormError.EmptyTitle -> stringResource(R.string.add_task_error_empty_title)
+    AddTaskFormError.InvalidCustomInterval -> stringResource(R.string.add_task_error_invalid_custom_interval)
     AddTaskFormError.EmptyCategoryName -> stringResource(R.string.add_category_error_empty_name)
     AddTaskFormError.DuplicateCategoryName -> stringResource(R.string.add_category_error_duplicate_name)
     AddTaskFormError.Unknown -> stringResource(R.string.add_task_error_unknown)

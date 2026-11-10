@@ -71,6 +71,7 @@
     <string name="add_task_start_date_cancel">Cancelar</string>
     <string name="add_task_save_button">Salvar Tarefa</string>
     <string name="add_task_error_empty_title">Informe um título para a tarefa</string>
+    <string name="add_task_error_invalid_custom_interval">Informe um intervalo de pelo menos 1 dia</string>
     <string name="add_task_error_unknown">Não foi possível salvar a tarefa. Tente novamente.</string>
     <string name="add_task_new_category_chip">+ Nova categoria</string>
     <string name="add_category_dialog_title">Nova categoria</string>

@@ -83,6 +83,22 @@ class AddTaskViewModelTest {
     }
 
     @Test
+    fun `onSaveClick com intervalo personalizado zero mostra erro e nao salva`() = runTest {
+        val viewModel = buildViewModel()
+
+        viewModel.onTitleChange("Trocar filtro de barro")
+        viewModel.onRecurrenceTypeChange(RecurrenceType.CUSTOM_DAYS)
+        viewModel.onCustomIntervalDaysChange("0")
+        viewModel.onSaveClick()
+        dispatcher.scheduler.advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals(AddTaskFormError.InvalidCustomInterval, state.error)
+        assertTrue(state.isSaved.not())
+        assertTrue(taskRepository.observeTasks().value.isEmpty())
+    }
+
+    @Test
     fun `onSaveClick com recorrencia mensal calcula proximo vencimento em um mes`() = runTest {
         val viewModel = buildViewModel()
 

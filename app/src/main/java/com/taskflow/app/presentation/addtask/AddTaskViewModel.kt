@@ -138,6 +138,7 @@ class AddTaskViewModel(
             }.onFailure { throwable ->
                 val error = when (throwable) {
                     is TaskValidationException.EmptyTitle -> AddTaskFormError.EmptyTitle
+                    is TaskValidationException.InvalidCustomInterval -> AddTaskFormError.InvalidCustomInterval
                     else -> AddTaskFormError.Unknown
                 }
                 _state.value = _state.value.copy(isSaving = false, error = error)
