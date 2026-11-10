@@ -99,4 +99,29 @@ class TaskDetailViewModelTest {
         // `isDeleted`, não mostrar a mensagem de "tarefa não existe mais".
         assertTrue(state.isNotFound.not())
     }
+
+    @Test
+    fun `detalhe reflete edicoes feitas depois de aberto`() = runTest {
+        val task = Task(
+            id = 1,
+            title = "Lista de compras",
+            categoryId = null,
+            recurrenceType = RecurrenceType.WEEKLY,
+            nextDueDate = LocalDateTime.now().plusDays(3)
+        )
+        val repository = FakeTaskRepository(listOf(task))
+        val viewModel = TaskDetailViewModel(
+            taskId = 1,
+            taskRepository = repository,
+            deleteTaskUseCase = DeleteTaskUseCase(repository, FakeTaskNotificationScheduler())
+        )
+        dispatcher.scheduler.advanceUntilIdle()
+
+        repository.updateTask(task.copy(title = "Lista de compras do mês", description = "arroz, feijão"))
+        dispatcher.scheduler.advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals("Lista de compras do mês", state.task?.title)
+        assertEquals("arroz, feijão", state.task?.description)
+    }
 }

@@ -7,6 +7,11 @@ import com.taskflow.app.domain.usecase.DeleteTaskUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TaskDetailViewModel(
@@ -19,22 +24,37 @@ class TaskDetailViewModel(
     val state: StateFlow<TaskDetailState> = _state.asStateFlow()
 
     init {
-        loadTask()
+        observeTask()
     }
 
-    private fun loadTask() {
-        viewModelScope.launch {
-            val task = taskRepository.getTaskById(taskId)
-            val history = taskRepository.getExecutionHistory(taskId)
-            _state.value = TaskDetailState(task = task, history = history, isLoading = false)
-        }
+    /**
+     * Observa a tarefa em vez de carregá-la uma única vez: ao voltar da tela de edição
+     * (que fica por cima desta na pilha), o detalhe reflete o título/descrição/recorrência
+     * atualizados sem precisar recriar o ViewModel.
+     */
+    private fun observeTask() {
+        taskRepository.observeTasks()
+            .map { tasks -> tasks.find { it.id == taskId } }
+            .distinctUntilChanged()
+            .onEach { task ->
+                val current = _state.value
+                // Durante/após a exclusão a tarefa some do Flow; ignoramos esse null para
+                // não piscar a mensagem de "tarefa não existe mais" antes de navegar de volta.
+                if (task == null && (current.isDeleting || current.isDeleted)) return@onEach
+
+                val history = if (task != null) taskRepository.getExecutionHistory(taskId) else emptyList()
+                _state.update { it.copy(task = task, history = history, isLoading = false) }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onDeleteClick() {
+        if (_state.value.isDeleting || _state.value.isDeleted) return
+
         viewModelScope.launch {
-            _state.value = _state.value.copy(isDeleting = true)
+            _state.update { it.copy(isDeleting = true) }
             deleteTaskUseCase(taskId)
-            _state.value = _state.value.copy(isDeleting = false, isDeleted = true)
+            _state.update { it.copy(isDeleting = false, isDeleted = true) }
         }
     }
 }
