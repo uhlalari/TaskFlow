@@ -99,6 +99,21 @@ class AddTaskViewModelTest {
     }
 
     @Test
+    fun `onSaveClick repetido salva a tarefa uma unica vez`() = runTest {
+        val viewModel = buildViewModel()
+
+        viewModel.onTitleChange("  Comprar ração  ")
+        viewModel.onSaveClick()
+        viewModel.onSaveClick()
+        dispatcher.scheduler.advanceUntilIdle()
+        viewModel.onSaveClick()
+        dispatcher.scheduler.advanceUntilIdle()
+
+        val saved = taskRepository.observeTasks().value.single()
+        assertEquals("Comprar ração", saved.title)
+    }
+
+    @Test
     fun `onSaveClick com recorrencia mensal calcula proximo vencimento em um mes`() = runTest {
         val viewModel = buildViewModel()
 

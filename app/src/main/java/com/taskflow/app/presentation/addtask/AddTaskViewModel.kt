@@ -124,9 +124,11 @@ class AddTaskViewModel(
 
     fun onSaveClick() {
         val current = _state.value
+        // Evita tarefas duplicadas quando o usuário toca em "Salvar" várias vezes seguidas.
+        if (current.isSaving || current.isSaved) return
+        _state.value = current.copy(isSaving = true, error = null)
 
         viewModelScope.launch {
-            _state.value = current.copy(isSaving = true, error = null)
             runCatching {
                 if (current.isEditMode) {
                     updateTaskUseCase(buildUpdatedTask(current))
@@ -147,8 +149,8 @@ class AddTaskViewModel(
     }
 
     private fun buildNewTask(current: AddTaskState): Task = Task(
-        title = current.title,
-        description = current.description,
+        title = current.title.trim(),
+        description = current.description.trim(),
         categoryId = current.selectedCategoryId,
         recurrenceType = current.recurrenceType,
         customIntervalDays = current.customIntervalDaysText.toIntOrNull(),
@@ -162,8 +164,8 @@ class AddTaskViewModel(
             (current.recurrenceType == RecurrenceType.CUSTOM_DAYS && original.customIntervalDays != customIntervalDays)
 
         val updated = original.copy(
-            title = current.title,
-            description = current.description,
+            title = current.title.trim(),
+            description = current.description.trim(),
             categoryId = current.selectedCategoryId,
             recurrenceType = current.recurrenceType,
             customIntervalDays = customIntervalDays
