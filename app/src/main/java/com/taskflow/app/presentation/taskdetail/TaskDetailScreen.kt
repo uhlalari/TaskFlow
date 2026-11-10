@@ -127,54 +127,89 @@ private fun TaskDetailContent(
     onDeleteClick: () -> Unit,
     onEditClick: () -> Unit
 ) {
+    // O conteúdo (descrição + histórico) rola numa única LazyColumn que ocupa o espaço
+    // disponível, e os botões de ação ficam fixos no rodapé. Assim tarefas com descrições
+    // longas (ex.: listas de compras) nunca empurram "Editar"/"Excluir" para fora da tela.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        state.task?.let { task ->
-            GlassCard(modifier = Modifier.fillMaxWidth()) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(task.title, style = MaterialTheme.typography.headlineSmall)
-                    Text(task.description, style = MaterialTheme.typography.bodyMedium)
-                    Text(
-                        stringResource(
-                            R.string.task_detail_next_execution,
-                            task.nextDueDate.format(dateFormatter)
-                        ),
-                        color = if (task.isOverdue) {
-                            GlassTertiary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            state.task?.let { task ->
+                item(key = "task_header") {
+                    GlassCard(modifier = Modifier.fillMaxWidth()) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(task.title, style = MaterialTheme.typography.headlineSmall)
+                            if (task.description.isNotBlank()) {
+                                Text(task.description, style = MaterialTheme.typography.bodyMedium)
+                            }
+                            Text(
+                                stringResource(
+                                    R.string.task_detail_next_execution,
+                                    task.nextDueDate.format(dateFormatter)
+                                ),
+                                color = if (task.isOverdue) {
+                                    GlassTertiary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+                            )
                         }
+                    }
+                }
+            }
+
+            item(key = "history_title") {
+                Text(
+                    stringResource(R.string.task_detail_history_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            if (state.history.isEmpty()) {
+                item(key = "history_empty") {
+                    Text(
+                        stringResource(R.string.task_detail_history_empty),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            }
-        }
-
-        Text(stringResource(R.string.task_detail_history_title), style = MaterialTheme.typography.titleMedium)
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(state.history, key = { it.id }) { execution ->
-                GlassCard(modifier = Modifier.fillMaxWidth().animateItem()) {
-                    Text(execution.completedAt.format(dateFormatter))
+            } else {
+                items(state.history, key = { it.id }) { execution ->
+                    GlassCard(modifier = Modifier.fillMaxWidth().animateItem()) {
+                        Text(execution.completedAt.format(dateFormatter))
+                    }
                 }
             }
         }
 
-        GlassButton(
-            text = stringResource(R.string.task_detail_edit_button),
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onEditClick
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            GlassButton(
+                text = stringResource(R.string.task_detail_edit_button),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onEditClick
+            )
 
-        GlassButton(
-            text = stringResource(R.string.task_detail_delete_button),
-            isLoading = state.isDeleting,
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onDeleteClick
-        )
+            GlassButton(
+                text = stringResource(R.string.task_detail_delete_button),
+                isLoading = state.isDeleting,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onDeleteClick
+            )
+        }
     }
 }
 

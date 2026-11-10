@@ -90,6 +90,7 @@
     <!-- Task Detail -->
     <string name="task_detail_next_execution">Próxima execução: %1$s</string>
     <string name="task_detail_history_title">Histórico de execuções</string>
+    <string name="task_detail_history_empty">Essa tarefa ainda não foi concluída nenhuma vez.</string>
     <string name="task_detail_edit_button">Editar Tarefa</string>
     <string name="task_detail_delete_button">Excluir Tarefa</string>
     <string name="task_delete_confirmation_title">Excluir tarefa?</string>
